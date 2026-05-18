@@ -1,8 +1,6 @@
+import React from 'react'
+import Dashboard from './pages/Dashboard'
 
 export default function App() {
-  return (
-    <div className="App">
-      <h1>Phishing Email Simulator</h1>
-    </div>
-  )
+  return < Dashboard />;
 }

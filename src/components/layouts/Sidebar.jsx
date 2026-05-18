@@ -1,8 +1,8 @@
 import { button } from 'framer-motion/client'
-import { LayoutDashboard } from 'lucide-react'
+import { BarChart3, LayoutDashboard, Mail, Shield, User } from 'lucide-react'
 import React from 'react'
 
-export default function Sidebar() {
+function Sidebar() {
   return (
     <aside className='w-64 bg-zinc-900 border-r border-zinc-800'>
       <div className='p-6 border-b border-zinc-800'>
@@ -41,7 +41,7 @@ export default function Sidebar() {
   )
 }
 
-export default function SidebarItem({ icon: Icon, label, active }) { 
+function SidebarItem({ icon: Icon, label, active }) { 
   return (
     <button className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition ${
       active 
@@ -54,3 +54,5 @@ export default function SidebarItem({ icon: Icon, label, active }) {
     </button>
   )
 }
+
+export {Sidebar, SidebarItem};

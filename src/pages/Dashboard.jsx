@@ -1,13 +1,14 @@
 
 import React from 'react'
-import Sidebar from '../components/layouts/Sidebar'
+import {Sidebar, SidebarItem} from '../components/layouts/Sidebar'
 import Topbar from '../components/layouts/Topbar'
 import MetricCard from '../components/dashboard/MetricCard'
 import CampaignTable from '../components/dashboard/CampaignTable'
 import RiskUsers from '../components/dashboard/RiskUsers'
 import ActivityFeed from '../components/dashboard/ActivityFeed'
+import { metrics } from '../assets/data/metrics'
 
-function Dashboard() {
+export default function Dashboard() {
   return (
     <div className='flex min-h-screen bg-zinc-950 text-white'>
         <Sidebar />
@@ -38,6 +39,4 @@ function Dashboard() {
 
     </div>
   )
-}
-
-export default Dashboard
+} 
