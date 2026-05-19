@@ -1,6 +1,6 @@
-import { button } from 'framer-motion/client'
 import { BarChart3, LayoutDashboard, Mail, Shield, User } from 'lucide-react'
 import React from 'react'
+import { NavLink } from 'react-router-dom';
 
 function Sidebar() {
   return (
@@ -31,7 +31,7 @@ function Sidebar() {
           active
         />
 
-        <SidebarItem icon={Mail} label="Campaigns" />
+        <SidebarItem icon={Mail} label="Campaigns" to='/campaigns'/>
 
         <SidebarItem icon={User} label="Users" />
 
@@ -41,17 +41,21 @@ function Sidebar() {
   )
 }
 
-function SidebarItem({ icon: Icon, label, active }) { 
+function SidebarItem({ icon: Icon, label, to }) { 
   return (
-    <button className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition ${
-      active 
+    <NavLink 
+      to={to}
+      end
+      className={({ isActive}) =>
+      `w-full flex items-center gap-3 px-4 py-3 rounded-xl transition ${
+      isActive 
       ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
       : "hover:bg-zinc-800 text-zinc-400"
     }`}
     >
       <Icon className='w-4 h-4' />
       {label}
-    </button>
+    </NavLink>
   )
 }
 
