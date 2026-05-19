@@ -1,5 +1,6 @@
 import React from 'react'
 import { campaigns } from '../../assets/data/campaign'
+import StatusBadge from './StatusBadge'
 
 export default function CampaignTable() {
   return (
@@ -24,7 +25,7 @@ export default function CampaignTable() {
           {campaigns.map((campaign)=>(
             <tr key={campaign.id} className='border-t border-zinc-800'>
             <td className='p-4 font-medium'>{campaign.name}</td>
-            <td className='p-4'>{campaign.status}</td>
+            <td className='p-4'>< StatusBadge status={campaign.status} /></td>
             <td className='p-4'>{campaign.sent}</td>
             <td className='p-4'>{campaign.clickRate}%</td>
             </tr>
