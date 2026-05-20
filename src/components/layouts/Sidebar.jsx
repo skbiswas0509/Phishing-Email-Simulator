@@ -33,7 +33,7 @@ function Sidebar() {
 
         <SidebarItem icon={Mail} label="Campaigns" to='/campaigns'/>
 
-        <SidebarItem icon={User} label="Users" />
+        <SidebarItem icon={User} label="Users" to='/users'/>
 
         <SidebarItem icon={BarChart3} label="Analytics" />
       </nav>

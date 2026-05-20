@@ -1,5 +1,5 @@
 import React from 'react'
-import { Users } from '../../assets/data/users'
+import { users } from '../../assets/data/users'
 
 export default function RiskUsers() {
   return (
@@ -8,8 +8,8 @@ export default function RiskUsers() {
         Highest Risk Users
       </h3>
 
-      <div className='space-y-4'>
-        {Users.map((user)=>(
+      <div className='space-y-4'>2
+        {users.map((user)=>(
           <div
             key={user.name}
             className='flex items-center justify-between'
