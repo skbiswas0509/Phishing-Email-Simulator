@@ -1,7 +1,7 @@
 import { X } from 'lucide-react';
 import React, { useState } from 'react'
 
-export default function NewCampaignModal() {
+export default function NewCampaignModal({ isOpen, onClose, onSave }) {
   const [form, setForm] = useState({
     name: "", template: "IT Support Request",
     group: "All Staff", date: "", time: "09:00",
@@ -14,13 +14,13 @@ export default function NewCampaignModal() {
     return (
     <div
     className='fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50'
-    onClick={(e) => e.target === e.currentTarget && onclose()}
+    onClick={(e) => e.target === e.currentTarget && onClose()}
     >
         <div className='bg-zinc-900 border border-zinc-800 rounded-2xl w-full max-w-lg'>
           {/* header */}
           <div className='flex items-center justify-between p-6 border-b border-zinc-800'>
             <h3 className='font-semibold text-lg'>New Campaign</h3>
-            <button onClick={onClose} className='text-zinc-500 hover:text-white transition'>
+            <button onClick={onclose} className='text-zinc-500 hover:text-white transition'>
                 <X className='w-5 h-5' />
             </button>
           </div>
