@@ -13,11 +13,7 @@ export default function Topbar() {
           Monitor Phishing awareness campaigns
         </p>
       </div>
-
-      <button className='flex items-center gap-2 bg-emerald-400 text-black px-4 py-2 rounded-xl font-medium'>
-        <Plus className='w-4 h-4' />
-        New Campaign
-      </button>
+      
     </header>
   )
 }

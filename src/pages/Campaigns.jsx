@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Plus, Search } from "lucide-react";
 import StatusBadge from "../components/dashboard/StatusBadge";
 import NewCampaignModal from "../components/campaigns/NewCampaignModal";
-import { campaigns } from "../assets/data/campaign";
 import { Sidebar } from "../components/layouts/Sidebar";
 import { deleteCampaign, getCampaigns } from "../api";
 
@@ -14,44 +13,38 @@ const FILTERS = [
   "Draft",
 ];
 
-
 export default function Campaigns() {
   const [filter, setFilter] = useState("All");
   const [search, setSearch] = useState("");
   const [showModal, setModal] = useState(false);
-  const [campaigns, setCampaigns] = useState([])
-  const [loading, setLoading] = useState(true)
+  const [campaignsList, setCampaignsList] = useState([]); // Renamed to avoid conflict
+  const [loading, setLoading] = useState(true);
 
   async function loadCampaigns() {
-    setLoading(true)
-    const data = await getCampaigns()
-    setCampaigns(data)
-    setLoading(false)
+    setLoading(true);
+    const data = await getCampaigns();
+    setCampaignsList(data);
+    setLoading(false);
   }
 
-  useEffect(() =>{
-    loadCampaigns()
-  }, [])
+  useEffect(() => {
+    loadCampaigns();
+  }, []);
 
-  async function handleDelete(id){
-    if (!confirm('Delete this campaign?')) return
-    await deleteCampaign(id)
-    loadCampaigns()
+  async function handleDelete(id) {
+    if (!confirm('Delete this campaign?')) return;
+    await deleteCampaign(id);
+    loadCampaigns();
   }
 
-  function handleCreated(){
-    setModal(false)
-    loadCampaigns()
+  function handleCreated() {
+    setModal(false);
+    loadCampaigns(); // Refresh the list after creating a new campaign
   }
 
-  const visible = campaigns.filter((c) => {
-    const matchFilter =
-      filter === "All" || c.status === filter;
-
-    const matchSearch = c.name
-      .toLowerCase()
-      .includes(search.toLowerCase());
-
+  const visible = campaignsList.filter((c) => {
+    const matchFilter = filter === "All" || c.status === filter;
+    const matchSearch = c.name.toLowerCase().includes(search.toLowerCase());
     return matchFilter && matchSearch;
   });
 
@@ -63,10 +56,7 @@ export default function Campaigns() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-xl font-semibold">
-              Campaigns
-            </h2>
-
+            <h2 className="text-xl font-semibold">Campaigns</h2>
             <p className="text-sm text-zinc-500 mt-1">
               Manage all phishing simulations
             </p>
@@ -100,14 +90,11 @@ export default function Campaigns() {
           {/* Search */}
           <div className="ml-auto flex items-center gap-2 bg-zinc-900 border border-zinc-800 rounded-xl px-3 py-2">
             <Search className="w-4 h-4 text-zinc-500" />
-
             <input
               className="bg-transparent text-sm outline-none placeholder-zinc-500 text-white w-44"
               placeholder="Search campaigns..."
               value={search}
-              onChange={(e) =>
-                setSearch(e.target.value)
-              }
+              onChange={(e) => setSearch(e.target.value)}
             />
           </div>
         </div>
@@ -117,66 +104,39 @@ export default function Campaigns() {
           <table className="w-full">
             <thead className="bg-zinc-950 text-zinc-500 text-sm">
               <tr>
-                <th className="text-left p-4">
-                  Campaign
-                </th>
-
-                <th className="text-left p-4">
-                  Status
-                </th>
-
-                <th className="text-left p-4">
-                  Group
-                </th>
-
-                <th className="text-left p-4">
-                  Sent
-                </th>
-
-                <th className="text-left p-4">
-                  Click Rate
-                </th>
-
-                <th className="text-left p-4">
-                  Date
-                </th>
+                <th className="text-left p-4">Campaign</th>
+                <th className="text-left p-4">Status</th>
+                <th className="text-left p-4">Group</th>
+                <th className="text-left p-4">Sent</th>
+                <th className="text-left p-4">Click Rate</th>
+                <th className="text-left p-4">Date</th>
               </tr>
             </thead>
-
             <tbody>
-              {visible.length === 0 ? (
+              {loading ? (
                 <tr>
-                  <td
-                    colSpan={6}
-                    className="p-8 text-center text-zinc-500 text-sm"
-                  >
+                  <td colSpan={6} className="p-8 text-center text-zinc-500 text-sm">
+                    Loading campaigns...
+                  </td>
+                </tr>
+              ) : visible.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="p-8 text-center text-zinc-500 text-sm">
                     No campaigns match your filter
                   </td>
                 </tr>
               ) : (
                 visible.map((c) => (
                   <tr
-                    key={c.name}
+                    key={c.id || c.name}
                     className="border-t border-zinc-800 hover:bg-zinc-800/50 transition"
                   >
-                    <td className="p-4 font-medium">
-                      {c.name}
-                    </td>
-
+                    <td className="p-4 font-medium">{c.name}</td>
                     <td className="p-4">
-                      <StatusBadge
-                        status={c.status}
-                      />
+                      <StatusBadge status={c.status} />
                     </td>
-
-                    <td className="p-4 text-zinc-400 text-sm">
-                      {c.group}
-                    </td>
-
-                    <td className="p-4 text-zinc-400 text-sm">
-                      {c.sent}
-                    </td>
-
+                    <td className="p-4 text-zinc-400 text-sm">{c.target_group || c.group}</td>
+                    <td className="p-4 text-zinc-400 text-sm">{c.sent || 0}</td>
                     <td className="p-4">
                       {c.clickRate > 0 ? (
                         <span
@@ -191,15 +151,10 @@ export default function Campaigns() {
                           {c.clickRate}%
                         </span>
                       ) : (
-                        <span className="text-zinc-600 text-sm">
-                          --
-                        </span>
+                        <span className="text-zinc-600 text-sm">--</span>
                       )}
                     </td>
-
-                    <td className="p-4 text-zinc-500 text-sm">
-                      {c.date}
-                    </td>
+                    <td className="p-4 text-zinc-500 text-sm">{c.send_date || c.date}</td>
                   </tr>
                 ))
               )}
@@ -208,9 +163,17 @@ export default function Campaigns() {
         </div>
       </div>
 
+      {/* Modal - Fixed props passing */}
       {showModal && (
         <NewCampaignModal
+          isOpen={showModal}
           onClose={() => setModal(false)}
+          onCreated={handleCreated}
+          // or if using onSave:
+          // onSave={(campaignData) => {
+          //   console.log('Campaign saved:', campaignData);
+          //   handleCreated();
+          // }}
         />
       )}
     </div>
