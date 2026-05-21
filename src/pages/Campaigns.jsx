@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Plus, Search } from "lucide-react";
 import StatusBadge from "../components/dashboard/StatusBadge";
 import NewCampaignModal from "../components/campaigns/NewCampaignModal";
 import { campaigns } from "../assets/data/campaign";
 import { Sidebar } from "../components/layouts/Sidebar";
+import { deleteCampaign, getCampaigns } from "../api";
 
 const FILTERS = [
   "All",
@@ -13,10 +14,35 @@ const FILTERS = [
   "Draft",
 ];
 
+
 export default function Campaigns() {
   const [filter, setFilter] = useState("All");
   const [search, setSearch] = useState("");
   const [showModal, setModal] = useState(false);
+  const [campaigns, setCampaigns] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  async function loadCampaigns() {
+    setLoading(true)
+    const data = await getCampaigns()
+    setCampaigns(data)
+    setLoading(false)
+  }
+
+  useEffect(() =>{
+    loadCampaigns()
+  }, [])
+
+  async function handleDelete(id){
+    if (!confirm('Delete this campaign?')) return
+    await deleteCampaign(id)
+    loadCampaigns()
+  }
+
+  function handleCreated(){
+    setModal(false)
+    loadCampaigns()
+  }
 
   const visible = campaigns.filter((c) => {
     const matchFilter =

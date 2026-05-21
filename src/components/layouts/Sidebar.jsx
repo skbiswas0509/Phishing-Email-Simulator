@@ -28,14 +28,14 @@ function Sidebar() {
         <SidebarItem
           icon={LayoutDashboard}
           label='Dashboard'
-          active
+          to ='/'
         />
 
         <SidebarItem icon={Mail} label="Campaigns" to='/campaigns'/>
 
         <SidebarItem icon={User} label="Users" to='/users'/>
 
-        <SidebarItem icon={BarChart3} label="Analytics" />
+        <SidebarItem icon={BarChart3} label="Analytics" to='/analytics' />
       </nav>
     </aside>
   )

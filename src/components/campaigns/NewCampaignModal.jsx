@@ -1,5 +1,6 @@
 import { X } from 'lucide-react';
 import React, { useState } from 'react'
+import { createCampaign } from '../../api';
 
 export default function NewCampaignModal({ isOpen, onClose, onSave }) {
   const [form, setForm] = useState({
@@ -7,10 +8,22 @@ export default function NewCampaignModal({ isOpen, onClose, onSave }) {
     group: "All Staff", date: "", time: "09:00",
   });
 
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+
   const set = (field) => (e) =>
     setForm((prev) => ({...prev, [field]: e.target.value 
     }));
   
+ async function handleSubmit() {
+    if (!form.name.trim()) { setError('Campaign name is required'); return}
+    setLoading(true)
+    setError('')
+    const res = await createCampaign(form)
+    setLoading(false)
+    if(res.error) { setError(res.error); return }
+    onCreated()
+ }
     return (
     <div
     className='fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50'
@@ -23,6 +36,14 @@ export default function NewCampaignModal({ isOpen, onClose, onSave }) {
             <button onClick={onclose} className='text-zinc-500 hover:text-white transition'>
                 <X className='w-5 h-5' />
             </button>
+          </div>
+
+          <div className="p-6 space-y-4">
+            {error && (
+                <div className="bg-rose-500/10 border border-rose-500/20 text-sm px-4 py-2.5 rounded-x">
+                    {error}
+                </div>
+            )}
           </div>
 
             {/* body */}
@@ -107,16 +128,12 @@ export default function NewCampaignModal({ isOpen, onClose, onSave }) {
                 className='px-4 py-2 rounded-xl text-sm text-zinc-400 hover:text-white hover:bg-zinc-800 transition'>
             Cancel
             </button>
-            <button
-                onClick={onClose}
-                className='px-4 py-2 rounded-xl text-sm bg-zinc-800 text-white hover:bg-zinc-700 transition'>
-            Save Draft
-            </button>
 
             <button
-                onClick={onClose}
-                className='px-4 py-2 rounded-xl text-sm bg-emerald-400 text-black font-medium hover:bg-emerald-300 transition'>
-            Schedule
+                onClick={handleSubmit}
+                disabled={loading}
+                className='px-4 py-2 rounded-xl text-sm bg-emerald-400 text-black font-medium hover:bg-emerald-300 transition disabled:opcaity-50'>
+            {loading ? 'Creating...' : 'Create Campaign'}
             </button>
         </div>
     </div>
