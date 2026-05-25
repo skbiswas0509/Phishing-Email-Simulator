@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { sendCampaign } from '../../api'  // Fixed: changed sendCampaing to sendCampaign
+import { sendCampaign } from '../../api'  
 import { Plus, Send, Trash2, X } from 'lucide-react'
 
 export default function SendCampaignModal({ campaign, onClose, onSent }) {
@@ -25,12 +25,12 @@ export default function SendCampaignModal({ campaign, onClose, onSent }) {
   async function handleSend() {
     const valid = recipients.filter((r) => r.name.trim() && r.email.trim())
     if (valid.length === 0) {
-      setError('Add at least one recipient with name and email');  // Fixed: typo "on" to "one"
+      setError('Add at least one recipient with name and email');  
       return
     }
     setLoading(true)
     setError('')
-    const res = await sendCampaign(campaign.id, valid)  // Fixed: changed sendCampaing to sendCampaign
+    const res = await sendCampaign(campaign.id, valid)  
     setLoading(false)
     setResult(res)
     if (res.sent?.length > 0) onSent()

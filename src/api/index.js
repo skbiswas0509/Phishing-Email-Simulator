@@ -14,7 +14,7 @@ export async function createCampaign(data) {
     return res.json();
 }
 
-export async function sendCampaing(campaignId, recepients) {
+export async function sendCampaign(campaignId, recipients) {
     const res = await fetch(`${BASE}/send/${campaignId}`, {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
