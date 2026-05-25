@@ -44,15 +44,12 @@ export default function NewCampaignModal({ isOpen, onClose, onCreated }) {
       if (onCreated) {
         onCreated();
       }
-      
       onClose();
     } catch (err) {
       setError(err.message || 'Failed to create campaign');
       setLoading(false);
     }
   }
-
-  if (!isOpen) return null;
 
   return (
     <div

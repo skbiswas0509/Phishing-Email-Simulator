@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Plus, Search } from "lucide-react";
+import { Plus, Search, Send, Trash2 } from "lucide-react";
 import StatusBadge from "../components/dashboard/StatusBadge";
 import NewCampaignModal from "../components/campaigns/NewCampaignModal";
 import { Sidebar } from "../components/layouts/Sidebar";
 import { deleteCampaign, getCampaigns } from "../api";
+import SendCampaignModal from "../components/campaigns/SendCampaignModal";
 
 const FILTERS = [
   "All",
@@ -17,8 +18,9 @@ export default function Campaigns() {
   const [filter, setFilter] = useState("All");
   const [search, setSearch] = useState("");
   const [showModal, setModal] = useState(false);
-  const [campaignsList, setCampaignsList] = useState([]); // Renamed to avoid conflict
+  const [campaignsList, setCampaignsList] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [sending, setSending] = useState(null);
 
   async function loadCampaigns() {
     setLoading(true);
@@ -39,7 +41,7 @@ export default function Campaigns() {
 
   function handleCreated() {
     setModal(false);
-    loadCampaigns(); // Refresh the list after creating a new campaign
+    loadCampaigns(); 
   }
 
   const visible = campaignsList.filter((c) => {
@@ -128,7 +130,7 @@ export default function Campaigns() {
               ) : (
                 visible.map((c) => (
                   <tr
-                    key={c.id || c.name}
+                    key={c.id}
                     className="border-t border-zinc-800 hover:bg-zinc-800/50 transition"
                   >
                     <td className="p-4 font-medium">{c.name}</td>
@@ -137,24 +139,25 @@ export default function Campaigns() {
                     </td>
                     <td className="p-4 text-zinc-400 text-sm">{c.target_group || c.group}</td>
                     <td className="p-4 text-zinc-400 text-sm">{c.sent || 0}</td>
+                    <td className="p-4 text-zinc-500 text-sm">{c.send_date ?? "--"}</td>
                     <td className="p-4">
-                      {c.clickRate > 0 ? (
-                        <span
-                          className={`text-sm font-medium ${
-                            c.clickRate >= 25
-                              ? "text-rose-400"
-                              : c.clickRate >= 15
-                              ? "text-amber-400"
-                              : "text-emerald-400"
-                          }`}
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => setSending(c)}
+                          className="p-1.5 rounded-lg hover:bg-zinc-700 text-zinc-500 hover:text-emerald-400 transition"
+                          title="Send Campaign"
                         >
-                          {c.clickRate}%
-                        </span>
-                      ) : (
-                        <span className="text-zinc-600 text-sm">--</span>
-                      )}
+                          <Send className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(c.id)}
+                          className="p-1.5 rounded-lg hover:bg-zinc-700 text-zinc-500 hover:text-rose-400 transition"
+                          title="Delete"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
                     </td>
-                    <td className="p-4 text-zinc-500 text-sm">{c.send_date || c.date}</td>
                   </tr>
                 ))
               )}
@@ -163,17 +166,19 @@ export default function Campaigns() {
         </div>
       </div>
 
-      {/* Modal - Fixed props passing */}
       {showModal && (
         <NewCampaignModal
           isOpen={showModal}
           onClose={() => setModal(false)}
-          onCreated={handleCreated}
-          // or if using onSave:
-          // onSave={(campaignData) => {
-          //   console.log('Campaign saved:', campaignData);
-          //   handleCreated();
-          // }}
+          onCreated={() => { setModal(false); loadCampaigns(); }}
+        />
+      )}
+
+      {sending && (
+        <SendCampaignModal
+        campaign={sending}
+        onClose={() => setSending(null)}
+        onSent={() => { setSending(null); loadCampaigns();}}
         />
       )}
     </div>
