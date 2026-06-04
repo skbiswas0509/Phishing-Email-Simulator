@@ -139,7 +139,7 @@ export default function Campaigns() {
                     </td>
                     <td className="p-4 text-zinc-400 text-sm">{c.target_group || c.group}</td>
                     <td className="p-4 text-zinc-400 text-sm">{c.sent || 0}</td>
-                    <td className="p-4 text-zinc-500 text-sm">{c.send_date ?? "--"}</td>
+                    <td className="p-4 text-zinc-500 text-sm">{c.clickRate ?? "--"}</td>
                     <td className="p-4">
                       <div className="flex items-center gap-2">
                         <button
