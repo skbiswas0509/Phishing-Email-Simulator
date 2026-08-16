@@ -1,4 +1,7 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
+import { Sidebar } from '../components/layouts/Sidebar'
+import { getCampaigns, getCampaignResults, getCampaignEvents } from '../api'
+import { BarChart3, MousePointerClick, Mail, ShieldAlert, ChevronDown } from 'lucide-react'
 
 
 function StatCard({ icon:Icon, label, value, color}) {
