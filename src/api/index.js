@@ -32,3 +32,13 @@ export async function deleteCampaign(id) {
     const res = await fetch(`${BASE}/campaigns/${id}`, { method: 'DELETE'});
     return res.json();
 }
+
+export async function getCampaignResults(id) {
+    const res = await fetch(`${BASE}/campaigns/${id}`)
+    return res.json();
+}
+
+export async function getCampaignEvents(id){
+    const res = await fetch(`${BASE}/track/events/${id}`);
+    return res.json();2
+}
