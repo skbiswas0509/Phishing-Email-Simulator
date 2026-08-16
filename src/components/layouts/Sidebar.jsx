@@ -1,4 +1,4 @@
-import { BarChart3, LayoutDashboard, Mail, Shield, User } from 'lucide-react'
+import { BarChart3, LayoutDashboard, Mail, Shield, User, ClipboardList } from 'lucide-react'
 import React from 'react'
 import { NavLink } from 'react-router-dom';
 
@@ -36,6 +36,7 @@ function Sidebar() {
         <SidebarItem icon={User} label="Users" to='/users'/>
 
         <SidebarItem icon={BarChart3} label="Analytics" to='/analytics' />
+        <SidebarItem icon={ClipboardList} label="Results" to='/results' />
       </nav>
     </aside>
   )
